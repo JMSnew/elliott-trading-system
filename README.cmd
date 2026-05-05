@@ -177,3 +177,61 @@ Orden correcto:
 4. Añadir multi-timeframe
 5. Integrar exchange (Binance API)
 6. Automatizar trading
+
+🚀 Roadmap recomendado (muy importante)
+
+Este es el orden REALISTA para seguir:
+
+1️⃣ Fibonacci validation (CRÍTICO)
+
+👉 Mejora la calidad de señales
+
+2️⃣ Selección inteligente de setups
+
+👉 No solo ABC → elegir el mejor
+
+3️⃣ Backtesting
+
+👉 Saber si funciona de verdad
+
+4️⃣ Multi-timeframe
+
+👉 Validación superior
+
+5️⃣ Trading real (API)
+
+👉 Binance o similar
+
+🔥 Cómo trabajar conmigo sin que explote el chat
+
+Haz esto:
+
+"vamos con fibonacci validation"
+
+o
+
+"quiero mejorar la selección de ABC"
+
+Y yo te doy:
+
+✔ qué archivo crear/modificar
+✔ código exacto
+✔ explicación clara
+✔ sin ruido
+⚠️ Regla de oro
+NO intentes construir todo a la vez
+
+Tu sistema ya está en nivel:
+
+junior → mid trader system
+
+Ahora toca hacerlo:
+
+mid → profesional
+🧠 Resumen
+
+La mejor forma de seguir es:
+
+GitHub = base
+Features = pasos pequeños
+Chat = guía puntual
