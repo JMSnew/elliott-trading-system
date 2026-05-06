@@ -1,6 +1,7 @@
 import { calculateZigZag } from "./indicators/zigzag.js";
 import { detectBullishImpulse } from "./elliott/detectImpulse.js";
 import { detectAllBullishZigZagCorrections } from "./elliott/detectAllZigZagCorrections.js";
+import { detectFlatCorrection } from "./elliott/detectFlatCorrection.js";
 import { generateAbcCorrectionSignal } from "./strategy/abcCorrectionStrategy.js";
 import { calculateLayerSize } from "./layers/positionSizing.js";
 import { calculatePositionQuantity } from "./risk/positionQuantity.js";
@@ -55,12 +56,14 @@ async function main() {
 
   const impulse = detectBullishImpulse(strongSwings);
   const allCorrections = detectAllBullishZigZagCorrections(strongSwings);
+  const flatCorrection = detectFlatCorrection(strongSwings);
 
   const currentPrice = candles[candles.length - 1].close;
 
   console.log("Swings fuertes:", strongSwings);
   console.log("Impulso Elliott:", impulse);
-  console.log("Correcciones ABC detectadas:", allCorrections.length);
+  console.log("Correcciones ABC ZigZag detectadas:", allCorrections.length);
+  console.log("Corrección Flat:", flatCorrection);
   console.log("Precio actual:", currentPrice);
 
   if (!impulse.valid) {
@@ -72,14 +75,15 @@ async function main() {
       strategy: "IMPULSE_CONTEXT",
       signal: "NO_TRADE",
       price: currentPrice,
-      reason: impulse.reason
+      reason: impulse.reason,
+      flatCorrection
     });
 
     return;
   }
 
   if (allCorrections.length === 0) {
-    console.log("NO_TRADE: hay impulso, pero no hay correcciones ABC válidas.");
+    console.log("NO_TRADE: hay impulso, pero no hay correcciones ABC ZigZag válidas.");
 
     logSignal({
       symbol,
@@ -88,7 +92,8 @@ async function main() {
       signal: "NO_TRADE",
       price: currentPrice,
       impulse: impulse.waves,
-      reason: "No se detectaron correcciones ABC"
+      flatCorrection,
+      reason: "No se detectaron correcciones ABC ZigZag válidas"
     });
 
     return;
@@ -101,8 +106,10 @@ async function main() {
   );
 
   if (!activeCorrection) {
-    console.log("NO_TRADE: no hay ABC activa después del impulso.");
-    console.log("Motivo: las correcciones detectadas ya están vencidas o no pertenecen al impulso.");
+    console.log("NO_TRADE: no hay ABC ZigZag activa después del impulso.");
+    console.log(
+      "Motivo: las correcciones detectadas ya están vencidas o no pertenecen al impulso."
+    );
 
     logSignal({
       symbol,
@@ -111,14 +118,15 @@ async function main() {
       signal: "NO_TRADE",
       price: currentPrice,
       impulse: impulse.waves,
+      flatCorrection,
       correctionsDetected: allCorrections.length,
-      reason: "No hay corrección ABC activa después del impulso"
+      reason: "No hay corrección ABC ZigZag activa después del impulso"
     });
 
     return;
   }
 
-  console.log("ABC activa encontrada:", activeCorrection.correction);
+  console.log("ABC ZigZag activa encontrada:", activeCorrection.correction);
   console.log("Take Profit ABC:", activeCorrection.takeProfit);
 
   const abcSignal = generateAbcCorrectionSignal(activeCorrection, currentPrice);
@@ -173,6 +181,7 @@ async function main() {
     takeProfit: abcSignal.takeProfit || activeCorrection.takeProfit,
     impulse: impulse.waves,
     correction: activeCorrection.correction,
+    flatCorrection,
     position
   });
 

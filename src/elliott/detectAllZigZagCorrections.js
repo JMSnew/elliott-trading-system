@@ -1,3 +1,5 @@
+import { validateAbcFibonacci } from "./validateAbcFibonacci.js";
+
 export function detectAllBullishZigZagCorrections(swings) {
   const corrections = [];
 
@@ -24,7 +26,7 @@ export function detectAllBullishZigZagCorrections(swings) {
     if (!waveBDoesNotBreakStart) continue;
     if (!waveCBreaksWaveA) continue;
 
-    corrections.push({
+    const candidate = {
       valid: true,
       pattern: "bullish_zigzag_correction",
       correction: {
@@ -34,6 +36,15 @@ export function detectAllBullishZigZagCorrections(swings) {
         waveC
       },
       reason: "Corrección A-B-C tipo zigzag detectada"
+    };
+
+    const fibonacciValidation = validateAbcFibonacci(candidate);
+
+    if (!fibonacciValidation.valid) continue;
+
+    corrections.push({
+      ...candidate,
+      fibonacci: fibonacciValidation
     });
   }
 
