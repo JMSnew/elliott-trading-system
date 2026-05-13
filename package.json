@@ -8,7 +8,10 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "backtest": "node scripts/runBacktest.js",
-    "test": "node --test"
+    "test": "node --test",
+    "docs": "jsdoc -c jsdoc.json",
+    "docs:md": "documentation build \"src/**/*.js\" -f md -o DOCUMENTACION_TECNICA.md",
+    "docs:pdf": "md-to-pdf DOCUMENTACION_TECNICA.md"
   },
   "keywords": [
     "trading",
@@ -24,6 +27,9 @@
     "technicalindicators": "^3.1.0"
   },
   "devDependencies": {
+    "documentation": "^14.0.3",
+    "jsdoc": "^4.0.5",
+    "md-to-pdf": "^5.2.5",
     "nodemon": "^3.1.9"
   }
 }
